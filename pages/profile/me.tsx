@@ -1,24 +1,18 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import { useUser } from "../../contexts/user.context";
+import { Button } from "@mantine/core";
+import { logOut } from "../../utils/auth";
+import usePrivateRoute from "../../hooks/usePrivateRoute";
 
 function MyProfile() {
-  const router = useRouter();
-  const { user } = useUser();
-
-  useEffect(() => {
-    async function fetchUserProfile() {
-      if (!user) return router.push("/");
-      const url = `/api/profile/me?uid=${user.uid}`;
-      const res = await fetch(url);
-      const result = await res.json();
-    }
-    fetchUserProfile();
-  }, [user, router]);
-
+  usePrivateRoute();
+  const handleLogOut = async (): Promise<void> => {
+    return logOut();
+  };
   return (
     <div>
       <h2>This is my profile</h2>
+      <Button color="red" variant="outline" onClick={handleLogOut}>
+        Log out
+      </Button>
     </div>
   );
 }

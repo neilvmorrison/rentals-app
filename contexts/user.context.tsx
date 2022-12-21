@@ -21,6 +21,7 @@ interface IUserContext {
   isAuthenticated: boolean;
   logOut: () => Promise<void>;
   setProfile: (profile: Profile) => void;
+  loadingUser: boolean;
 }
 
 export const UserContext = createContext<IUserContext>({
@@ -29,10 +30,12 @@ export const UserContext = createContext<IUserContext>({
   profile: null,
   logOut,
   setProfile: () => {},
+  loadingUser: true,
 });
 
 export function UserProvider({ children }: UserProviderProps) {
   const firebaseAuthState = useAuthState(firebaseAuth);
+  const [loadingUser, setLoadingUser] = useState(firebaseAuthState[1]);
   const [user, setUser] = useState<User | undefined | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,10 +45,12 @@ export function UserProvider({ children }: UserProviderProps) {
     if (!firebaseAuthState[1] && firebaseAuthState[0]) {
       setIsAuthenticated(true);
       setUser(firebaseAuthState[0]);
+      setLoadingUser(firebaseAuthState[1]);
     }
     if (!firebaseAuthState[1] && !firebaseAuthState[0]) {
       setIsAuthenticated(false);
       setUser(firebaseAuthState[0]);
+      setLoadingUser(firebaseAuthState[1]);
     }
   }, [firebaseAuthState]);
 
@@ -69,6 +74,7 @@ export function UserProvider({ children }: UserProviderProps) {
         logOut,
         profile,
         setProfile,
+        loadingUser,
       }}
     >
       {children}
