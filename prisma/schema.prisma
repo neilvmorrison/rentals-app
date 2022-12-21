@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("DATABASE_URL_SHADOW")
+}
+
+enum UserRole {
+  LANDLORD
+  TENANT
+  REALTOR
+  INTERNAL
+}
+
+enum PaymentMethod {
+  CHECK
+  E_TRANSFER
+  OTHER
+}
+
+model Profile {
+  id            String          @id @default(uuid())
+  contact       Contact?        @relation(fields: [contactId], references: [id])
+  contactId     String?         @unique
+  userId        String
+  overallRating String?
+  avatar        String?
+  reviews       ProfileReview[]
+  ListingReview ListingReview[]
+  Listing       Listing[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime?       @updatedAt
+  deletedAt     DateTime?
+}
+
+model Contact {
+  id             String    @id @default(uuid())
+  primaryPhone   String?
+  secondaryPhone String?
+  email          String
+  givenName      String?
+  middleName     String?
+  familyName     String?
+  Profile        Profile?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+}
+
+model ListingReview {
+  id             String    @id @default(uuid())
+  author         Profile   @relation(fields: [authorId], references: [id])
+  authorId       String
+  listing        Listing   @relation(fields: [listingId], references: [id])
+  listingId      String
+  comments       String
+  wouldRecommend Boolean
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+}
+
+model ProfileReview {
+  id        String    @id @default(uuid())
+  Profile   Profile?  @relation(fields: [profileId], references: [id])
+  profileId String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Listing {
+  id            String          @id @default(uuid())
+  reviews       ListingReview[]
+  owner         Profile         @relation(fields: [ownerId], references: [id])
+  ownerId       String
+  title         String
+  description   String
+  overallRating String
+  paymentMethod PaymentMethod
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
+}
