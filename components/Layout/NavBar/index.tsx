@@ -10,7 +10,6 @@ interface NavbarProps {
 }
 
 function NavBar({ isOpen, isAuthenticated, user }: NavbarProps) {
-  console.log(user);
   if (!isOpen) return null;
   return (
     <Navbar width={{ base: 280 }} p="xs">

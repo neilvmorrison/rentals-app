@@ -36,7 +36,7 @@ export function UserProvider({ children }: UserProviderProps) {
   const [user, setUser] = useState<User | undefined | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  console.log({ profile });
+
   useEffect(() => {
     if (firebaseAuthState[1]) return;
     if (!firebaseAuthState[1] && firebaseAuthState[0]) {
@@ -48,6 +48,18 @@ export function UserProvider({ children }: UserProviderProps) {
       setUser(firebaseAuthState[0]);
     }
   }, [firebaseAuthState]);
+
+  useEffect(() => {
+    async function fetchUserProfile(uid: string) {
+      const res = await fetch(`/api/profile/me?uid=${uid}`);
+      const result = await res.json();
+      setProfile(result);
+    }
+    if (!isAuthenticated) return;
+    if (user) {
+      fetchUserProfile(user.uid);
+    }
+  }, [user, isAuthenticated]);
 
   return (
     <UserContext.Provider

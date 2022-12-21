@@ -1,8 +1,9 @@
+import { Profile } from ".prisma/client";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { findSelfProfileByUserUid } from "../../../services/profiles.service";
+import { findProfileByUserUid } from "../../../services/profiles.service";
 
 type Data = {
-  profile: any;
+  profile: Profile | null;
 };
 
 export default async function handler(
@@ -10,6 +11,6 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   const { uid } = req.query;
-  const selfProfile = await findSelfProfileByUserUid(uid as string);
+  const selfProfile = await findProfileByUserUid(uid as string);
   res.status(200).json({ profile: selfProfile });
 }

@@ -14,7 +14,6 @@ interface UserTileProps {
 }
 
 function UserTile({ user }: UserTileProps) {
-  console.log(user?.photoURL);
   const theme = useMantineTheme();
   const router = useRouter();
   const handleNavigate = (url: string): void => {
