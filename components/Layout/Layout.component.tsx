@@ -1,7 +1,8 @@
-import { AppShell, Navbar, Header } from "@mantine/core";
+import { AppShell } from "@mantine/core";
 import { ReactNode, useState } from "react";
 import { useUser } from "../../contexts/user.context";
 import NavBar from "./NavBar";
+import Header from "./Header";
 
 interface LayoutProps {
   children: ReactNode | ReactNode[];
@@ -23,11 +24,7 @@ function Layout({ children }: LayoutProps) {
           user={user}
         />
       }
-      header={
-        <Header height={60} p="xs">
-          <button onClick={toggleNavBar}>ClickMe</button>
-        </Header>
-      }
+      header={<Header onClick={toggleNavBar} />}
       styles={(theme) => ({
         main: {
           backgroundColor:

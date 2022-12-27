@@ -11,7 +11,10 @@ export async function findSelfProfileByUserUid(
 export async function findProfileByUserUid(
   uid: string
 ): Promise<Profile | null> {
-  return prisma.profile.findFirst({ where: { userId: uid } });
+  return prisma.profile.findFirst({
+    where: { userId: uid },
+    include: { contact: true },
+  });
 }
 
 export async function createUserProfile(
