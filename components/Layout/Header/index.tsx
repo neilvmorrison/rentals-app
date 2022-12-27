@@ -4,6 +4,8 @@ import {
   UnstyledButton,
   Text,
   Box,
+  Button,
+  ActionIcon,
 } from "@mantine/core";
 import { IconMenu2, IconMessage, IconSettings } from "@tabler/icons";
 import Link from "next/link";
@@ -29,9 +31,7 @@ function HeaderLinks() {
     return (
       <UnstyledButton key={link.href} ml="sm">
         <Link href={link.href}>
-          <ThemeIcon color="gray" variant="light">
-            {link.icon}
-          </ThemeIcon>
+          <ActionIcon color="gray">{link.icon}</ActionIcon>
         </Link>
       </UnstyledButton>
     );
@@ -48,13 +48,16 @@ function Header({ height = 60, onClick }: HeaderProps) {
     >
       <Box sx={{ display: "flex" }}>
         <UnstyledButton onClick={onClick}>
-          <ThemeIcon variant="light" color="gray">
+          <ActionIcon color="gray">
             <IconMenu2 />
-          </ThemeIcon>
+          </ActionIcon>
         </UnstyledButton>
         <Text ml="sm">Tenant Buddy</Text>
       </Box>
-      <Box>
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <Link href="/listing/create">
+          <Button variant="subtle">Create a listing</Button>
+        </Link>
         <HeaderLinks />
       </Box>
     </MantineHeader>
